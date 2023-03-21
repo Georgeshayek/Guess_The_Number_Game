@@ -4,28 +4,27 @@ body{
 }
 .main_Container{
     width:40%;
-    background-color: white;
-    border: 4px solid brown;
+   
     margin: auto;
     margin-top:  10rem;
 }
-.title_Container{
+.main_Container h3{
     font-style: italic;
 }
 .Result_Container{
     font-weight: bolder;
 }
-.Input_Container label{
+.main_Container label{
 display:block;
 }
-.Input_Container input{
+.main_Container input{
     margin-top:  1.438rem; 
     width: 60%;
    height: 20px;
    border:  3px solid brown;
  border-radius:0.2rem ;
 }
-.Input_Container input:focus{
+.main_Container input:focus{
     box-shadow: 0px 0px 2px 2px brown;
    
 }
@@ -53,7 +52,7 @@ button{
     .main_Container{
         width: 80%;
     }
-    .Input_Container input{
+    .main_Container input{
         margin-bottom: 3%;
     }
   }

@@ -1,5 +1,5 @@
 
-import NumberGuess from './components/NumberGuess';
+import NumberGuess from './components/NumberGuess/NumberGuess';
 import './App.css';
 
 function App() {
