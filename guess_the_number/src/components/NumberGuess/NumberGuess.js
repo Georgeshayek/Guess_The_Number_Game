@@ -70,7 +70,7 @@ const NumberGuess = () => {
   const reduceChances = () => {
     setChance((prev) => prev - 1);
     setClose(userGuess > randomNumber ? "Lower" : "Higher");
-    setLivesLeft(`you still have ${chances} attempts left`);
+   
   };
   const setUserGuessHandler = (event) => {
     setUserGuess(event.target.value);
