@@ -1,105 +1,101 @@
-import styler from "./NumberGuess.module.css";
-import React, { useState, useEffect, Fragment } from "react";
+import classes from "./NumberGuess.module.css";
+import React, { useState, useEffect } from "react";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
-import ErrorModal from "../UI/ErrorModal";
-const NumberGuess = () => {
-  const [error, setError] = useState();
+
+const NumberGuess = (props) => {
+  
   const [userGuess, setUserGuess] = useState("");
   const [randomNumber, setRandomNumber] = useState(
     Math.floor(Math.random() * (10 - 1 + 1)) + 1
   );
-  const [chances, setChance] = useState(2);
+  const [chances, setChance] = useState(3);
   const [won, setWon] = useState(2);
   const [result, setResult] = useState("");
-  const [livesleft, setLivesLeft] = useState();
   const [close, setClose] = useState("");
+
   useEffect(() => {
-    setLivesLeft(`You still have ${chances + 1} attempts left`);
+    if(chances===0)
+  {winLost(0, "You've Lost");}
   }, [chances]);
-  const resetall = () => {
+  
+  const lives=chances?`You still have ${chances} attempts left`:`unlucky it was ${randomNumber}! try again!`
+  
+  const resetAll = () => {
     setWon(2);
     setRandomNumber(Math.floor(Math.random() * (10 - 1 + 1)) + 1);
-    setChance(2);
+    setChance(3);
     setResult("");
     setUserGuess("");
-    setLivesLeft("You still have 3 attempts left");
     setClose("");
   };
-  const winlost = (num, str) => {
+
+  const winLost = (num, str) => {
     setWon(num);
     setResult(str);
     setClose("");
   };
+
   const checkResult = (event) => {
     event.preventDefault();
+
     if (!userGuess) {
-      setUserGuess("");
-      setError({
+      
+      props.errorHandler({
         title: "Empty input",
         message: "please enter a number between 1 and 10",
       });
-    } else {
+    } 
+    else {
       if (userGuess > 10 || userGuess < 1) {
-        setUserGuess("");
-        setError({
+      
+        props.errorHandler({
           title: "Invalid input",
           message: "number should be between 1 and 10",
         });
-      } else {
+      } 
+      else {
         if (!Number.isInteger(+userGuess)) {
-          setUserGuess("");
-          setError({
+          props.errorHandler({
             title: "Decimal number are not Allowed",
             message: "number should be an integer and not decimal!",
           });
-        } else {
-          if (chances === 0 && +userGuess !== randomNumber) {
-            winlost(0, "You've Lost");
-            setLivesLeft(`unlucky it was ${randomNumber}! try again!`);
-          } else
+        }
+         else {
             +userGuess === randomNumber
-              ? winlost(1, "You've Won!!")
-              : reduceChances();
-
-          setUserGuess("");
+              ? winLost(1, "You've Won!!")
+              : reduceChances();   
         }
       }
     }
+    setUserGuess("");
   };
+  
   const reduceChances = () => {
     setChance((prev) => prev - 1);
     setClose(userGuess > randomNumber ? "Lower" : "Higher");
-    setLivesLeft(`you still have ${chances} attempts left`);
   };
   const setUserGuessHandler = (event) => {
     setUserGuess(event.target.value);
   };
-  const dismiss = () => {
-    setError(null);
-  };
+  
+
   return (
-    <Fragment>
-      {error && (
-        <ErrorModal
-          message={error.message}
-          title={error.title}
-          dismiss={dismiss}
-        />
-      )}
-      <Card className={styler.main_Container}>
+    
+      
+      <Card className={classes.main_Container}>
         <h3>Guess The Number</h3>
 
         <div
-          className={styler.Result_Container}
+          className={classes.Result_Container}
           style={{ color: won === 1 ? "green" : "red" }}
         >
           {result}
         </div>
 
-        <form onSubmit={checkResult} onReset={resetall}>
-          <div className={styler.Lives_Container}>
-            <p>{livesleft}</p>
+        <form onSubmit={checkResult} onReset={resetAll}>
+          <div className={classes.Lives_Container}>
+            <p>{lives}</p>
           </div>
 
           <p>{close}</p>
@@ -111,19 +107,20 @@ const NumberGuess = () => {
             value={userGuess}
           />
 
+ 
+          <Button type="reset" className={classes.Btn_Active}>
+            Reset
+          </Button>
           <Button
             type="submit"
-            className={won === 2 ? styler.Btn_Active : ""}
+            className={won === 2 ? classes.Btn_Active : ""}
             disabled={won !== 2}
           >
             Submit
           </Button>
-          <Button type="reset" className={styler.Btn_Active}>
-            Reset
-          </Button>
         </form>
       </Card>
-    </Fragment>
+    
   );
 };
 export default NumberGuess;
